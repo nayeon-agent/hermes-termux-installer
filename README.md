@@ -98,6 +98,7 @@ pkg install proot-distro
 **Ubuntu gagal install**
 ```
 termux-setup-storage
+termux-change-repo
 ```
 
 ---
