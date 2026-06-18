@@ -74,8 +74,14 @@ setup_ubuntu() {
 #!/usr/bin/env bash
 set -e
 
+# Disable ALL interactive prompts
+export DEBIAN_FRONTEND=noninteractive
+export APT_LISTCHANGES_FRONTEND=none
+export APT_INSTALL_OPTIONS="-o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
+
 echo "[✓] Inside Ubuntu — updating packages..."
-apt-get update -y && apt-get upgrade -y
+apt-get update -y
+apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 apt-get install -y curl wget git sudo
 
 echo "[✓] Installing Hermes Agent..."
@@ -116,7 +122,10 @@ INNER_EOF
 
 # --- Direct install (already in Ubuntu) ---
 do_install() {
-  apt-get update -y && apt-get upgrade -y
+  export DEBIAN_FRONTEND=noninteractive
+  export APT_LISTCHANGES_FRONTEND=none
+  apt-get update -y
+  apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
   apt-get install -y curl wget git sudo
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 }
