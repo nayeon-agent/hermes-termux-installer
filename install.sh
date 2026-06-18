@@ -44,10 +44,12 @@ setup_termux() {
   if [ "$IN_TERMUX" = false ]; then return; fi
 
   step "Updating Termux packages..."
-  pkg update -y && pkg upgrade -y
+  export DEBIAN_FRONTEND=noninteractive
+  yes "" | pkg update -y
+  yes "" | pkg upgrade -y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold
 
   step "Installing base dependencies..."
-  pkg install -y wget curl proot-distro git
+  yes "" | pkg install -y wget curl proot-distro git
 
   # Install Ubuntu if not present
   if ! proot-distro list 2>/dev/null | grep -qi ubuntu; then
@@ -80,9 +82,9 @@ export APT_LISTCHANGES_FRONTEND=none
 export APT_INSTALL_OPTIONS="-o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold"
 
 echo "[✓] Inside Ubuntu — updating packages..."
-apt-get update -y
-apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
-apt-get install -y curl wget git sudo
+yes "" | apt-get update -y
+yes "" | apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+yes "" | apt-get install -y curl wget git sudo -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
 echo "[✓] Installing Hermes Agent..."
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
@@ -124,9 +126,9 @@ INNER_EOF
 do_install() {
   export DEBIAN_FRONTEND=noninteractive
   export APT_LISTCHANGES_FRONTEND=none
-  apt-get update -y
-  apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
-  apt-get install -y curl wget git sudo
+  yes "" | apt-get update -y
+  yes "" | apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+  yes "" | apt-get install -y curl wget git sudo -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 }
 
